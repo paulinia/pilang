@@ -1,0 +1,331 @@
+A: [](@res
+	'res':65
+)
+B: [](@res
+	'res':66
+)
+C: [](@res
+	'res':67
+)
+D: [](@res
+	'res':68
+)
+E: [](@res
+	'res':69
+)
+F: [](@res
+	'res':70
+)
+G: [](@res
+	'res':71
+)
+H: [](@res
+	'res':72
+)
+I: [](@res
+	'res':73
+)
+J: [](@res
+	'res':74
+)
+K: [](@res
+	'res':75
+)
+L: [](@res
+	'res':76
+)
+M: [](@res
+	'res':77
+)
+N: [](@res
+	'res':78
+)
+O: [](@res
+	'res':79
+)
+P: [](@res
+	'res':80
+)
+Q: [](@res
+	'res':81
+)
+R: [](@res
+	'res':82
+)
+S: [](@res
+	'res':83
+)
+T: [](@res
+	'res':84
+)
+U: [](@res
+	'res':85
+)
+V: [](@res
+	'res':86
+)
+W: [](@res
+	'res':87
+)
+X: [](@res
+	'res':88
+)
+Y: [](@res
+	'res':89
+)
+Z: [](@res
+	'res':90
+)
+a: [](@res
+	'res':97
+)
+b: [](@res
+	'res':98
+)
+c: [](@res
+	'res':99
+)
+d: [](@res
+	'res':100
+)
+e: [](@res
+	'res':101
+)
+f: [](@res
+	'res':102
+)
+g: [](@res
+	'res':103
+)
+h: [](@res
+	'res':104
+)
+i: [](@res
+	'res':105
+)
+j: [](@res
+	'res':106
+)
+k: [](@res
+	'res':107
+)
+l: [](@res
+	'res':108
+)
+m: [](@res
+	'res':109
+)
+n: [](@res
+	'res':110
+)
+o: [](@res
+	'res':111
+)
+p: [](@res
+	'res':112
+)
+q: [](@res
+	'res':113
+)
+r: [](@res
+	'res':114
+)
+s: [](@res
+	'res':115
+)
+t: [](@res
+	'res':116
+)
+u: [](@res
+	'res':117
+)
+v: [](@res
+	'res':118
+)
+w: [](@res
+	'res':119
+)
+x: [](@res
+	'res':120
+)
+y: [](@res
+	'res':121
+)
+z: [](@res
+	'res':122
+)
+
+num_to_text : [](@res
+    'res' : # + 48
+)
+
+text_to_arr : [](@res
+    'i' : 0
+    'A' : #
+    'n' : #'A'
+    'res' : [ 'n' - 'i' (@val
+        'val' : 0
+        'c' : #'A'
+        'waste' : [ and[1 - equal['c', space[]], 'n' - 'i'] (@h
+            'h' : 'c' - 48
+            'val' : 'val' * 10 + 'h'
+            'c' : ? 'n' - 1 - 'i' (@v
+                'v' : '#'A'
+                );(@v
+                'v' : 'c'
+                )
+            'i' : 'i' + 1
+        )]
+        'i' : 'i' + 1
+    )]
+)
+
+space : [](@res
+    'res' : 32
+)
+
+tab : [](@res
+    'res' : 9
+)
+
+endl : [](@res
+    'res' : 10
+)
+
+
+or : [](@res
+    'a' : #
+    'b' : #
+    'res' : ? 'a' (@h
+        'h' : 1
+    ) ? 'b' (@h
+        'h' : 1
+    ) ; (@h
+        'h' : 0
+    )
+)
+
+join : [](@res
+    's' : #
+    't' : #
+    'i' : 0
+    'n' : #'s'
+    'm' : #'t'
+    'res' : ['n' + 'm' - 'i' (@val
+        'val' : ? 'm' - 'i' (@h
+            'h' : #'s'
+        ) ? 'i' (@h
+            'h' : #'t'
+        ) ; (@h
+            'h' : 'm' + 'n'
+        )
+    )]
+)
+
+split : [](@res
+    'i' : 1
+    'S' : #
+    'n' : #'S'
+    'c' : #'S'
+    'spaces' : [and[equal['c', space[]], 'n' - 'i'] (@h
+        'h' : 'c'
+        'c' : #'S'
+        'i' : 'i' + 1
+    )]
+    'cnt' : 0
+    'res' : ? equal['n', 1] (@val
+        'val' : ? equal['c', space[]] (@h
+            'h' : [0]
+        );(@h
+            'h' : [1, [1, 'c']]
+        )
+    );(@val
+        'arr' : ['n' - 'i' + 1 (@slovo
+            'bolo' : 0
+            'len' : 0
+            'slovo' : [and['n' - 'i' + 1, not[equal['c', space[]]]] (@s
+                's' : 'c'
+                'len' : 'len' + 1
+                'bolo' : 1
+                'c' : ? 'n' - 'i' (@C
+                    'C' : #'S'
+                );(@C
+                    'C' : 'c'
+                )
+                'i' : 'i' + 1
+            )]
+            'j' : 0
+            'slovo' : ['len' - 'j' + 1 (@s
+                's' : ? 'j' (@C
+                    'C' : #'slovo'
+                );(@C
+                    'C' : 'len'
+                )
+                'j' : 'j' + 1
+            )]
+            'cnt' : 'cnt' + 'bolo'
+            'spaces' : [and[equal['c', space[]], 'n' - 'i' + 1] (@h
+                'h' : 'c'
+                'c' : ? 'n' - 'i' (@C
+                    'C' : #'S'
+                );(@C
+                    'C' : 'c'
+                )
+                'i' : 'i' + 1
+            )]
+        )]
+        'val' : ['cnt', 'arr']
+    )
+)
+
+mod : [](@res
+    'a' : #
+    'b' : #
+    'pocet' : 'a' / 'b'
+    'res' : 'a' - 'b' * 'pocet'
+)
+
+equal : [](@res
+    'a' : #
+    'b' : #
+    'res' : to_bool['a' - 'b' + 1] * to_bool['b' - 'a' + 1]
+)
+
+to_bool : [](@res
+    'res' : ? # (@a
+        'a' : 1
+    );(@a
+        'a' : 0
+    )
+)
+
+not : [](@res
+    'a' : #
+    'res' : 1 - to_bool['a']
+)
+
+xor : [](@res
+    'a' : #
+    'b' : #
+    'res' : ? 'a' (@h
+        'h' : not['b']
+    );(@h
+        'h' : 'b'
+    )
+)
+
+and : [](@res
+    'res' : to_bool[#] * to_bool[#]
+)
+
+% : [10, H[], e[], l[], l[], o[], space[], w[], o[], r[], l[], d[]]
+text : <
+splitted : split[text]
+N : #splitted
+T : #splitted
+i : 0
+S : [N - i (@val
+    'val' : #T
+    % : 'val'
+    i : i + 1
+)

@@ -1,0 +1,17 @@
+a : 5
+b : 3
+
+n : 4
+i : 0
+
+x : [ n - i (@max
+                'max' : ? a - b (@res
+			'res' : a	
+			);(@res
+			'res' : b
+			)
+                a : a - 1
+                i : i + 1
+              ) ]
+
+! : x

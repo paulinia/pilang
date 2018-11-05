@@ -1,0 +1,12 @@
+n   : 10
+i   : 0
+bef : 0
+bf  : 1 
+F   : [n - i ( @f
+                 'f'   : bef + bf
+	             bf    : bef
+                 bef   : 'f'
+	             i     : i + 1
+               )]
+
+! : F

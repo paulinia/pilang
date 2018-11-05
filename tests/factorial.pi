@@ -1,0 +1,10 @@
+factorial : [](@res
+    'a' : #
+    'res' : ? 'a' (@h
+        'h' : 'a' * factorial['a' - 1]
+    );(@h
+        'h' : 1
+    )
+)
+
+! : factorial[1] + factorial[2] + factorial[3] + factorial[4] + factorial[5] + factorial[6] + factorial[7] + factorial[8]

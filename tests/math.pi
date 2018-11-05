@@ -1,0 +1,87 @@
+mod : [](@res
+    'a' : #
+    'b' : #
+    'pocet' : 'a' / 'b'
+    'res' : 'a' - 'b' * 'pocet'
+)
+
+sqrt : [](@res
+    'a' : #
+    'res' : -1
+    
+    
+    'A' : ['a' - 'res' * 'res' + 1 (@b
+        'b' : 'res'
+        'res' : 'res' + 1
+    )]
+    'res' : 'res' - 1
+)
+
+to_bool : [](@res
+    'res' : ? # (@a
+        'a' : 1
+    );(@a
+        'a' : 0
+    )
+)
+
+equal : [](@res
+    'a' : #
+    'b' : #
+    'res' : to_bool['a' - 'b' + 1] * to_bool['b' - 'a' + 1]
+)
+
+or : [](@res
+    'a' : #
+    'b' : #
+    'res' : ? 'a' (@h
+        'h' : 1
+    ) ? 'b' (@h
+        'h' : 1
+    ) ; (@h
+        'h' : 0
+    )
+)
+
+not : [](@res
+    'a' : #
+    'res' : 1 - to_bool['a']
+)
+
+xor : [](@res
+    'a' : #
+    'b' : #
+    'res' : ? 'a' (@h
+        'h' : not['b']
+    );(@h
+        'h' : 'b'
+    )
+)
+
+and : [](@res
+    'res' : to_bool[#] * to_bool[#]
+)
+
+pow : [](@res
+    'a' : #
+    'pw' : #
+    'b' : to_bool[1 - 'pw']
+    'res' : ? or[equal[0, 'pw'], to_bool[1 - 'a']]  (@b
+        'b' : 1
+    ) ? equal[1, 'pw'] (@b
+        'b' : 'a'
+    ) ; (@b
+        'half' : 'pw' / 2
+        'ans' : pow['a', 'half']
+        'b' : 'ans' * 'ans'
+        'b' : ? mod['pw', 2] (@c
+            'c' : 'b' * 'a'
+        ) ; (@c
+            'c' : 'b'
+        )
+    )
+)
+
+a : &
+b : &
+! : pow[a, b]

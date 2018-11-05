@@ -30,7 +30,10 @@ class NotEnoughArguments(Exception):
 class InvalidFunction(Exception):
     def __init__(self, name):
         print("The function", name, "does not exist")
-    
+
+class ListIsEmpty(Exception):
+    def __init__(self, name):
+        print("The list", name, "is empty");
 
 
 class Token:
@@ -40,21 +43,21 @@ class Token:
         self.sons = sons
     
     def evaluate(self, variables, inp, erase = False):
-        #print("Som v node typu", self.typ, " s hodnotou ", self.value, " a synmi,", self.sons)
         if self.typ == "VAR":
             if self.value[0] == "'":
                 if self.value[-1] != "'":
                     raise WrongVariableNameError()
                 if erase:
-                    #print(variables)
-                    res = variables[self.value][0]
-                    variables[self.value].remove(variables[self.value][0]);
+                    try:
+                        res = variables[self.value][0]
+                        variables[self.value].remove(variables[self.value][0]);
+                    except:
+                        raise ListIsEmpty(self.value);
                     return res
                 if type(variables[self.value]) == list:
                     return variables[self.value].copy()
                 return variables[self.value]
             else:
-                #print("VAR" , self.value, " in ", global_var)
                 if erase:
                     res = global_var[self.value][0]
                     global_var[self.value].remove(global_var[self.value][0]);
@@ -88,7 +91,6 @@ class Token:
                 s = input()
                 array = [ord(c) for c in s]
                 array = [len(array)] + array
-                #print("Returnujem string ako ", array)
                 return array
         elif self.typ == "UNO":
             if self.value == "#":
@@ -103,7 +105,6 @@ class Token:
             return eval(exp)
         elif self.typ == "FUN":
             try:
-                #print("Funcs:", func, self.value, (self.value in func.keys()))
                 return func[self.value].compute({}, self.sons[0].evaluate(variables, inp))
             except:
                 raise InvalidFunction(self.value)
@@ -132,7 +133,6 @@ class Token:
             print(k * " ", "]")
 
 def into_tree(tokens):
-    #print("Tokeny:", tokens)
     if tokens[0] == '[':
         array = []
         cntin, last = 0, 0
@@ -180,7 +180,6 @@ def into_tree(tokens):
                             elif tokens[till] == '[':
                                 count += 1
                             till += 1
-                        #print("Z", tokens, "[", i + 1, ",", till, ")")
                         without_parenthesses.append(Token("FUN", token, [into_tree(tokens[i + 1:till])]))
                         i = till - 1
             elif token == '&':
@@ -190,13 +189,6 @@ def into_tree(tokens):
             else:
                 without_parenthesses.append(token)
         i += 1
-    #debug
-    #print(tokens, " -> ")
-    #for wp in without_parenthesses:
-        #if type(wp) == str:
-            #print(wp)
-        #else:
-            #wp.print_token(0)
     
     without_unary = []
     last = None
@@ -266,9 +258,7 @@ class Expression:
                 cur += c
         if(cur != ""):
             tokens.append(cur)
-        #print("Expression of ", tokens, " -> ")
         self.expression = into_tree(tokens)
-        #self.expression.print_token(0);
     
     def compute(self, variables, inp):
         return self.expression.evaluate(variables, inp)
@@ -278,7 +268,6 @@ class BraceExpression:
         self.expressions = expressions
         self.var_target = target
     def compute(self, variables, inp):
-        #print(variables, inp, variables.copy())
         my_vars = dict(variables.copy())
         for expression in self.expressions:
             name = expression[0]
@@ -309,8 +298,6 @@ class IfExpression:
     
     def compute(self, variables, inp):
         for i, ex in enumerate(self.expressions):
-            #print("If... ")
-            #ex.expression.print_token(1)
             if ex.compute(variables, inp) > 0:
                 return self.braceExpression[i].compute(variables, inp)
         return self.braceExpression[-1].compute(variables, inp)
@@ -357,8 +344,6 @@ for line in lines:
     if new != "":
         edited.append(new)
 
-#print(edited)
-
 # dividing into expressions
 stack = []
 match = [-1 for l in edited]
@@ -367,9 +352,7 @@ expr = ["" for l in edited]
 funcs = [False for l in edited]
 
 for i, line in enumerate(edited):
-    #print(line, "pri stave stacku:", stack, "i: ", i)
     if line[0] == ")":
-        #print("Zatvorka uzatvori ", stack[-1], " co je ", edited[stack[-1]])
         match[stack[-1]] = i
         stack.remove(stack[-1])
         if len(line) > 1:
@@ -381,32 +364,22 @@ for i, line in enumerate(edited):
     else:
         poz = line.find(':')
         variable = line[:poz]
-        #print("vari on ", i,  "is", line[:poz], "and expression ", line[poz + 1:])
         var[i] = variable
         if line[poz + 1] == '?':
             stack.append(i)
             expr[i] = line[poz + 2:-1 - line[::-1].find('@') - 1]
         elif line[poz + 1:poz + 3] == "[]" and line.find('@') != -1:
-            #print("vari ", variable, " je fcia ")
             stack.append(i)
             funcs[i] = True
         elif line[poz + 1] == '[' and line.find('@') != -1:
             stack.append(i)
             expr[i] = line[poz + 2:-1 - line[::-1].find('@') - 1]
-            #print("Interval od ", poz + 2, ":-1 -", line[::-1].find('@') - 1, expr)
         else:
             expr[i] = line[poz + 1:]
 
-#print(*match)
-#print(*var)
-#print(*expr)
-
 def parse(s, e, target):
-    #print("Brace expression (@", target, "[", s, ", ", e, ")")
     this_scope = []
     while s != e:
-        #print("Expression: ", var[s],  " : ", expr[s], "|", s)
-        #print("match[s] : ", match[s])
         if match[s] == -1:
             this_scope.append((var[s], Expression(expr[s])))
             s += 1
@@ -426,7 +399,6 @@ def parse(s, e, target):
             elif funcs[s]:
                 tar = edited[s][edited[s].find('@') + 1:]
                 func[var[s]] = Function(parse(s + 1, match[s], tar))
-                #print("func:", func)
                 s = match[s] + 1
             else:
                 tar = edited[s][edited[s].find('@') + 1:]
@@ -438,8 +410,5 @@ def parse(s, e, target):
 code = parse(0, len(edited), "!")
 
 varis = {"'!'" : ""}
-
-#print(func)
-#print("Running\n--------------------------------------")
 
 code.compute(varis, [])

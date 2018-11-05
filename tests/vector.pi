@@ -1,0 +1,95 @@
+vector :[](@res
+    'res' : [[], 0]
+)
+
+push_back : [](@res "[[A, n], a] A.push(a)
+    'M' : #
+    'A' : #'M'
+    'a' : #
+    'n' : #'M'
+    'i' : 0
+    'resA' : ['n' - 'i' + 1 (@h
+        'h' : ? 'n' - 'i' (@b
+            'b' : #'A'
+        );(@b
+            'b' : 'a'
+        )
+        'i' : 'i' + 1
+    )]
+    'res' : ['resA', 'n' + 1]
+)
+
+size : [](@res "size[[A, n]]
+    'M' : #
+    'A' : #'M'
+    'res' : #'M'
+)
+
+to_bool : [](@res
+    'res' : ? # (@a
+        'a' : 1
+    );(@a
+        'a' : 0
+    )
+)
+
+equal : [](@res
+    'a' : #
+    'b' : #
+    'res' : to_bool['a' - 'b' + 1] * to_bool['b' - 'a' + 1]
+)
+
+ith_element : [](@res "[[A, n], i]
+    'V' : #
+    'i' : #
+    'j' : 0
+    'A' : #'V'
+    'AA' : 'A'
+    'n' : #'V'
+    'res' : -1
+    'AA' : ['n' - 'j' (@a
+        'a' : #'AA'
+        'res' : ? equal['i', 'j'] (@ans
+            'ans' : 'a'
+        );(@ans
+            'ans' : 'res'
+        )
+        'j' : 'j' + 1
+    )
+    'V' : ['AA', 'n']
+)
+
+write_to_index : [](@res " [[A, n], i, c] -> [A, n]
+    'V' : #
+    'A' : #'V'
+    'n' : #'V'
+    'i' : #
+    'c' : #
+    'j' : 0
+    'B' : ['n' - 'j' (@e
+        'a' : #'A'
+        'e' : ? equal['j', 'i'] (@el
+            'el' : 'c'
+        );(@el
+            'el' : 'a'
+        )
+        'j' : 'j' + 1
+    )]
+    'res' : ['B', 'n']
+)
+
+n : &
+A : vector[]
+i : 0
+
+unused : [n - i (@h
+    'a' : &
+    A : push_back[A, 'a']
+    'h' : i
+    i : i + 1
+)]
+
+! : size[A]
+! : ith_element[A, 0]
+A : write_to_index[A, 0, 47]
+! : A
