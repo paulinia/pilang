@@ -1,5 +1,5 @@
 # pilang
-An esotheric language for fun 
+An esoteric language for fun 
 
 ## Syntax
 
@@ -74,7 +74,7 @@ If we wanted to do the equivalent of else if, no nesting is necessary.
                                )
 ```
 
-Note that the current version of the interpreter requires the expression be a scope.
+Note that the current version of the interpreter requires the expression to be a scope.
 
 #### Loops
 
@@ -106,7 +106,7 @@ f : [](@<scope variable>
 )
 ```
 
-Every function takes an array of arguments. It's not possible to name the arguments. More about accessing the arguments is below.
+Every function takes an array of arguments. It's not possible to name the arguments. More about accessing the arguments below.
 
 Even though the function is written as a variable, it's not a variable and shouldn't be treated as such!
 
@@ -183,7 +183,7 @@ Less and greater are easier to come up with, so I let those for as an exercise f
 
 ### More about arrays
 
-Arrays in pilang don't support random, or almost any access. The only element that can be accessed in a pilang array is the first one. By accessing the element, the element is popped. The special character for such access is `#` More demonstrated in the following example:
+Arrays in pilang don't support random or almost any access. The only element that can be accessed in a pilang array is the first one. By accessing the element, the element is popped. The special character for such access is `#` More demonstrated in the following example:
 
 ```
 A : [1, 2, 3, 4, 5]
@@ -249,3 +249,110 @@ B : [n : (@b
 ! : B
 ```
 
+Sort
+
+### Mergesort
+
+This language seems pretty much useless (it is). It doesn't have proper access to arrays, is it even possible to code $O(n\log n)$ sort in it?
+
+As it turns out, yes, bottom-up mergesort has $O(n\log n)$ implementation in pilang!
+
+```
+" This function returns lesser of two numbers
+min : [](@res
+    'a' : #
+    'b' : #
+    'res' : ? 'a' - 'b' (@ans
+        'ans' : 'b'
+    );(@ans
+        'ans' : 'a'
+    )
+)
+
+"Mergesort takes A, an array with n elements, n and a number d - consecutive d-grams in the array are sorted
+mergesort : [](@res 
+    'A' : #
+    'n' : #
+    'd' : #
+    "If 'd' + 1 > 'n' the answer is 'A' - if at least 'n' consecutive elements in A are sorted, the array is sorted
+    'res' : ? 'd' - 'n' + 1 (@ans
+        'ans' : 'A'
+    );(@ans
+        'i' : 0
+        'fir' : []
+        'sec' : []
+        'f' : 0
+        's' : 0 "We're comparing the front elements, hence we need to have them stored outside the array
+        'f0' : 0
+        's0' : 0
+        'ans' : ['n' - 'i' (@a "In each iteration we add new element to array with sorted 2d-grams
+            'blah' : ? 'f' + 's' (@bleh
+                'bleh' : []
+            );(@bleh  "If both arrays we're merging are empty, we need to start merging another two
+                'j' : 'i'
+                'fir' : [min['i' + 'd', 'n'] - 'j' (@ff
+                    'ff' : #'A'
+                    'j' : 'j' + 1
+                    'f' : 'f' + 1
+                )]
+                'sec' : [min['i' + 2 * 'd', 'n'] - 'j' (@ss
+                    'ss' : #'A'
+                    'j' : 'j' + 1
+                    's' : 's' + 1
+                )]
+                'f0' : ? 'f' (@ble
+                    'ble' : #'fir'
+                );(@ble
+                    'ble' : 0
+                )
+                's0' : ? 's' (@ble
+                    'ble' : #'sec'
+                );(@ble
+                    'ble' : 0
+                )
+                'bleh' : []
+            )
+            
+            'a' : ? 'f' (@b " The merge itself are just lots of cases
+                'b' : ? 's' (@c
+                    'c' : ? 'f0' - 's0' (@aa
+                        'aa' : 's0'
+                        's' : 's' - 1
+                        's0' : ? 's' (@s1
+                            's1' : #'sec'
+                        );(@s1
+                            's1' : 0
+                        )
+                    );(@aa
+                        'aa' : 'f0'
+                        'f' : 'f' - 1
+                        'f0' : ? 'f' (@f1
+                            'f1' : #'fir'
+                        );(@f1
+                            'f1' : 0
+                        )
+                    )
+                );(@c
+                    'c' : 'f0'
+                    'f' : 'f' - 1
+                    'f0' : ? 'f' (@f1
+                        'f1' : #'fir'
+                    );(@f1
+                        'f1' : 0
+                    )
+                )
+            );(@b
+                'b' : 's0'
+                's' : 's' - 1
+                's0' : ? 's' (@s1
+                    's1' : #'sec'
+                );(@s1
+                    's1' : 0
+                )
+            )
+            'i' : 'i' + 1
+        )]
+        'ans' : mergesort['ans', 'n', 'd' * 2] "Recursivelly call mergesort
+    )
+)
+```
