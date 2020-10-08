@@ -31,7 +31,8 @@ __Variables__ in pilang can be either global or local. A local variable is disti
 ##### Examples
 
 `a` is a global variable
-`'a'` is a global variable
+
+`'a'` is a local variable
 
 Note that `a` and `'a'` are two different variables and it's perfectly fine to use both.
 
@@ -86,7 +87,7 @@ As every expression has to return something, loops are not an exception. A loop 
                  )]
 ```
 
-What does the loop do can be described with a following pseudocode:
+What the loop does can be described with a following pseudocode:
 
 ```python
 <variable name> = []
@@ -154,14 +155,14 @@ A line of input is converted to a pilang-like string and assigned to `s`.
 Comments in pilang are denoted by question marks.
 
 ```
-noacomment : 5 " + 4 is a comment " still a comment
+notacomment : 5 " + 4 is a comment " still a comment
 ```
 
 ### Logic in pilang
 
 Pilang doesn't have a built-in boolean type. Instead, it uses integers as booleans. If an integer is positive, it's true. If it's nonpositive (zero or less), then the truth value is false.
 
-Note that pilang doesn't have built-in equal, greater or less operators. In the test file _math.pi_ equal is implemented as below.
+Note that pilang does have neither built-in equal, greater nor less operators. In the test file _math.pi_, equal is implemented as below.
 
 ```
 to_bool : [](@res
@@ -190,7 +191,7 @@ A : [1, 2, 3, 4, 5]
 a : #A " a is now 1  and A is [2, 3, 4, 5]
 ```
 
-It's not possible to further enlarge the array, other than rewrite it completely.
+It's not possible to further enlarge the array. If the need arises, we need to rewrite it completely.
 
 #### Function array
 
@@ -313,7 +314,7 @@ mergesort : [](@res
                 'bleh' : []
             )
             
-            'a' : ? 'f' (@b " The merge itself are just lots of cases
+            'a' : ? 'f' (@b " The merge itself is just casework
                 'b' : ? 's' (@c
                     'c' : ? 'f0' - 's0' (@aa
                         'aa' : 's0'
